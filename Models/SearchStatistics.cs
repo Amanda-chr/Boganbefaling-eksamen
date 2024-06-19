@@ -11,11 +11,12 @@ namespace Boganbefaling_eksamen
 {
     public class SearchStatistics : INotifyPropertyChanged
     {
+        //Class that organizes the statistics of my searches and manages the search history
         private Dictionary<string, int> _genreCount;
         private int _totalSearches;
-        private Dictionary<DateTime, SearchHistoryEntry> _searchHistory; // CSV export
+        private Dictionary<DateTime, SearchHistoryEntry> _searchHistory;
 
-        public List<string> MuligeGenrer { get; private set; }
+        public List<string> PossibleGenres { get; private set; }
         public int TotalSearches
         {
             get { return _totalSearches; }
@@ -28,14 +29,16 @@ namespace Boganbefaling_eksamen
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public SearchStatistics(List<string> muligeGenrer)
+        //intitalizes _genreCount and _searchHistory
+        public SearchStatistics(List<string> possibleGenres)
         {
             _genreCount = new Dictionary<string, int>();
-            MuligeGenrer = muligeGenrer;
-            TotalSearches = 0;
             _searchHistory = new Dictionary<DateTime, SearchHistoryEntry>();
+            PossibleGenres = possibleGenres;
+            TotalSearches = 0;
         }
 
+        //Method that adds to the TotalSearches
         public void AddSearch(List<string> genres)
         {
             TotalSearches++;
@@ -56,6 +59,7 @@ namespace Boganbefaling_eksamen
             UpdateSummary(now.Date, genres);
         }
 
+        //Gets the search count for specific genres
         public int GetSearchCount(string genre)
         {
             if (_genreCount.ContainsKey(genre))
@@ -86,6 +90,7 @@ namespace Boganbefaling_eksamen
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        //Adding a formatted line with the search and timestamp to the CSV file
         public void LogSearch(DateTime timestamp, List<string> genres, string filePath)
         {
             string csvLine = $"{timestamp:yyyy-MM-ddTHH:mm:ss},{string.Join(",", genres)}";
@@ -98,6 +103,7 @@ namespace Boganbefaling_eksamen
             UpdateSummary(timestamp.Date, genres);
         }
 
+        //Updates _searchHistory
         public void UpdateSummary(DateTime date, List<string> genres)
         {
             if (!_searchHistory.ContainsKey(date))
@@ -130,6 +136,7 @@ namespace Boganbefaling_eksamen
             return _searchHistory.Values.ToList();
         }
 
+        //Writes to the CSV file
         public void SaveSearchHistoryToCSV(string filePath)
         {
             using (StreamWriter writer = new StreamWriter(filePath))

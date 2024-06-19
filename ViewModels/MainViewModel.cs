@@ -17,11 +17,11 @@ namespace Boganbefaling_eksamen
     {
 
         // Private fields
-        private ImporterJSON _importer;
-        private List<Publikation> _publikationer;
-        private List<string> _muligeGenrer;
-        private List<string> _valgteGenrer;
-        private List<Publikation> _anbefaledePublikationer;
+        private ImportJson _import;
+        private List<Publication> _publications;
+        private List<string> _possibleGenres;
+        private List<string> _selectedGenres;
+        private List<Publication> _recommendedPublications;
 
         private DispatcherTimer _saveTimer;
         private DispatcherTimer _timer;
@@ -31,7 +31,7 @@ namespace Boganbefaling_eksamen
         private DateTime _currentDateTime;
 
         // Properties
-        public DateTime CurrentDateTime
+        public DateTime CurrentDateTime //gets and sets the time, updates the changes.
         {
             get { return _currentDateTime; }
             set
@@ -44,71 +44,72 @@ namespace Boganbefaling_eksamen
             }
         }
 
-        public string SearchCounts
+        public string SearchCounts //if SearchStatistics is not null, returns the total numbers of searches to a string
         {
             get { return _searchStatistics != null ? _searchStatistics.TotalSearches.ToString() : "0"; }
         }
 
-        public List<Publikation> Publikationer
+        public List<Publication> Publications //get and set _publications. Updates _publications with new values
         {
-            get { return _publikationer; }
+            get { return _publications; }
             set
             {
-                _publikationer = value;
-                OnPropertyChanged(nameof(Publikationer));
+                _publications = value;
+                OnPropertyChanged(nameof(Publications));
             }
         }
 
-        public List<string> MuligeGenrer
+        public List<string> PossibleGenres
         {
-            get { return _muligeGenrer; }
+            get { return _possibleGenres; }
             set
             {
-                _muligeGenrer = value;
-                OnPropertyChanged(nameof(MuligeGenrer));
+                _possibleGenres = value;
+                OnPropertyChanged(nameof(PossibleGenres));
             }
         }
 
-        public List<string> ValgteGenrer
+        public List<string> SelectedGenres
         {
-            get { return _valgteGenrer; }
+            get { return _selectedGenres; }
             set
             {
-                _valgteGenrer = value;
-                OnPropertyChanged(nameof(ValgteGenrer));
+                _selectedGenres = value;
+                OnPropertyChanged(nameof(SelectedGenres));
             }
         }
 
-        public List<Publikation> AnbefaledePublikationer
+        public List<Publication> RecommendedPublications
         {
-            get { return _anbefaledePublikationer; }
+            get { return _recommendedPublications; }
             set
             {
-                _anbefaledePublikationer = value;
-                OnPropertyChanged(nameof(AnbefaledePublikationer));
+                _recommendedPublications = value;
+                OnPropertyChanged(nameof(RecommendedPublications));
             }
         }
 
-        public int TotalSearches
+        public int TotalSearches //returns the TotalSearches from _searchStatistics
         {
             get { return _searchStatistics.TotalSearches; }
         }
 
-        // Commands
+        // ICommands - handles user actions. 
         public ICommand StartDateTimeCommand => new Command(_ => StartDateTime());
         public ICommand StopDateTimeCommand => new Command(_ => StopDateTime());
         public ICommand StartRandomSearchesCommand => new Command(_ => StartRandomSearches());
         public ICommand StopRandomSearchesCommand => new Command(_ => StopRandomSearches());
         public ICommand SaveSearchHistoryCommand => new Command(_ => SaveSearchHistory());
-        public ICommand AnbefalCommand => new Command(_ => AnbefalBoeger());
+        public ICommand RecommendCommand => new Command(_ => RecommendBooks());
 
         // Constructor
         public MainViewModel()
         {
-            _importer = new ImporterJSON(@"C:\Users\Amand\Desktop\Eksamen_VP\PublikationData.json");
-            Publikationer = _importer.ImporterPublikationer();
-            MuligeGenrer = _importer.HentGenrertilWPF();
-            ValgteGenrer = new List<string>();
+            //JSON is imported, loaded in Publications, genres are saved in PossibleGenres. SelectedGenres contains user input
+            _import = new ImportJson(@"C:\Users\Amand\source\repos\Boganbefaling eksamen\ImportExport\PublikationData.json");
+            Publications = _import.LoadPublicationsFromJson();
+            PossibleGenres = _import.GetGenresToWPF();
+            SelectedGenres = new List<string>();
 
             // Initialize and start the timer for updating the current time
             _timer = new DispatcherTimer();
@@ -117,7 +118,7 @@ namespace Boganbefaling_eksamen
             _timer.Start();
 
             // Initialize search statistics
-            _searchStatistics = new SearchStatistics(MuligeGenrer);
+            _searchStatistics = new SearchStatistics(PossibleGenres);
             InitializeSearchCount();
             _searchStatistics.PropertyChanged += (sender, args) =>
             {
@@ -139,7 +140,8 @@ namespace Boganbefaling_eksamen
         }
 
         // Methods
-        private void InitializeSearchCount()
+        //Generates a random search based on what time it is now
+        private void InitializeSearchCount() 
         {
             int currentHour = DateTime.Now.Hour;
             int realisticSearchCount = new Random().Next(10, 50) * currentHour;
@@ -149,20 +151,23 @@ namespace Boganbefaling_eksamen
             }
         }
 
+        //Method that updates current time
         private void Timer_Tick(object sender, EventArgs e)
         {
             CurrentDateTime = DateTime.Now;
             OnPropertyChanged(nameof(CurrentDateTime));
         }
 
+        //Method that saves to the CSV file
         private void SaveTimer_Tick(object sender, EventArgs e)
         {
             SaveSearchHistory();
         }
 
+        //creates the CSV file and defines where to store it
         private void SaveSearchHistory()
         {
-            string folderPath = @"C:\Users\Amand\Desktop\Eksamen_VP\SearchHistory.csv";
+            string folderPath = @"C:\Users\Amand\source\repos\Boganbefaling eksamen\ImportExport\SearchHistory.csv";
             Directory.CreateDirectory(folderPath);
 
             string fileName = $"SearchHistory{DateTime.Now:yyyyMMdd}.csv";
@@ -172,29 +177,31 @@ namespace Boganbefaling_eksamen
             CsvHelper.WriteSearchHistoryToCsv(filePath, searchHistoryData);
         }
 
-        private void AnbefalBoeger()
+        //Method that recommends books based on the selceted genres. The publications with the most matching genres are shown first
+        private void RecommendBooks()
         {
-            if (ValgteGenrer.Any())
+            if (SelectedGenres.Any())
             {
-                AnbefaledePublikationer = Publikationer
+                RecommendedPublications = Publications
                     .Select(p =>
                     {
-                        double matchCount = p.Genrer.Count(g => ValgteGenrer.Contains(g, StringComparer.OrdinalIgnoreCase));
-                        p.MatchPercentage = matchCount / ValgteGenrer.Count;
+                        double matchCount = p.Genres.Count(g => SelectedGenres.Contains(g, StringComparer.OrdinalIgnoreCase));
+                        p.MatchPercentage = matchCount / SelectedGenres.Count;
                         return p;
                     })
                     .Where(p => p.MatchPercentage > 0)
                     .OrderByDescending(p => p.MatchPercentage)
                     .ToList();
 
-                _searchStatistics.AddSearch(ValgteGenrer);
+                _searchStatistics.AddSearch(SelectedGenres);
             }
             else
             {
-                AnbefaledePublikationer = new List<Publikation>();
+                RecommendedPublications = new List<Publication>();
             }
         }
 
+        //starts and stops the tthreads
         private void StartDateTime()
         {
             _timer.Start();
@@ -215,14 +222,14 @@ namespace Boganbefaling_eksamen
             _randomSearchThread.Stop();
         }
 
-        // Event and method for property change notification
+        // Event and method for property change updates
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        // Private class for command implementation
+        // Private class for ICommand implementation
         private class Command : ICommand
         {
             private readonly Action<object> _execute;

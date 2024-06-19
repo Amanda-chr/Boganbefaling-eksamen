@@ -7,7 +7,7 @@ using System.Threading;
 
 namespace Boganbefaling_eksamen
 {
-    public class DateTimeThread //tråd der viser dato og tidspunkt
+    public class DateTimeThread
     {
         private Thread _thread;
         private bool _isRunning;

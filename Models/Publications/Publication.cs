@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace Boganbefaling_eksamen
 {
-    public class Publikation
+    public class Publication
     {
         public string Type { get; set; }
-        public string Titel { get; set; }
-        public string Forfatter { get; set; }
-        public List<string> Genrer { get; set; }
-        public int PublikationsAar { get; set; }
-        public string Udgiver { get; set; }
+        public string Title { get; set; }
+        public string Author { get; set; }
+        public List<string> Genres { get; set; }
+        public int PublicationYear { get; set; }
+        public string Publisher { get; set; }
         public double MatchPercentage { get; set; }
     }
 }

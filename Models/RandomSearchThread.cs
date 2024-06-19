@@ -50,7 +50,7 @@ namespace Boganbefaling_eksamen.Models
         private void GenerateRandomSearch()
         {
             int genreCount = _random.Next(1, 4);
-            List<string> availableGenres = _searchStatistics.MuligeGenrer;
+            List<string> availableGenres = _searchStatistics.PossibleGenres;
             List<string> selectedGenres = availableGenres.OrderBy(x => _random.Next()).Take(genreCount).ToList();
 
             _searchStatistics.AddSearch(selectedGenres);

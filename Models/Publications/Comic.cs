@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace Boganbefaling_eksamen
 {
-    internal class Tegneserie : Publikation
+    internal class Comic : Publication
     {
-        public int AntalSider { get; set; }
+        public int NumOfPages { get; set; }
         public string Illustrator { get; set; }
-        public bool Farve { get; set; }
-        public bool Sort_Hvid { get; set; }
+        public bool Color { get; set; }
+        public bool Black_White { get; set; }
 
     }
 }

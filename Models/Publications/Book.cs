@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Boganbefaling_eksamen
 {
-    internal class Lydbog : Publikation
+    internal class Book : Publication
     {
-        public string IndtaltAf { get; set; }
-        public double LaengdeIMinutter { get; set; }
+        public int NumOfPages { get; set; }
+        public int Chapters { get; set; }
     }
 }

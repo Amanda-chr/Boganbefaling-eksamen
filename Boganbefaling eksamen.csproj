@@ -85,16 +85,16 @@
     </ApplicationDefinition>
     <Compile Include="Models\CsvHelper.cs" />
     <Compile Include="Models\DateTimeThread.cs" />
-    <Compile Include="Models\Publikationer\Bog.cs" />
-    <Compile Include="Models\Boganbefaling.cs" />
-    <Compile Include="Models\ImporterJSON.cs" />
-    <Compile Include="Models\Publikationer\Lydbog.cs" />
+    <Compile Include="Models\Publications\Book.cs" />
+    <Compile Include="Models\PubRecommendation.cs" />
+    <Compile Include="Models\ImportJson.cs" />
+    <Compile Include="Models\Publications\Audiobook.cs" />
     <Compile Include="Models\RandomSearchThread.cs" />
     <Compile Include="Models\Search.cs" />
     <Compile Include="Models\SearchStatistics.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
-    <Compile Include="Models\Publikationer\Publikation.cs" />
-    <Compile Include="Models\Publikationer\Tegneserie.cs" />
+    <Compile Include="Models\Publications\Publication.cs" />
+    <Compile Include="Models\Publications\Comic.cs" />
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

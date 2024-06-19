@@ -1,0 +1,67 @@
+[
+  {
+    "type": "Book",
+    "Title": "The Great Gatsby",
+    "Author": "F. Scott Fitzgerald",
+    "Genre": [ "Drama", "Classic", "Fiction" ],
+    "PublicationYear": 1925,
+    "Publisher": "Scribner",
+    "NumOfPages": 180,
+    "Chapters": 9
+  },
+  {
+    "type": "Book",
+    "Title": "Dune",
+    "Author": "Frank Herbert",
+    "Genre": [ "Science Fiction" ],
+    "PublicationYear": 1965,
+    "Publisher": "Chilton Books",
+    "NumOfPages": 412,
+    "Chapters": 24
+  },
+  {
+    "type": "Book",
+    "Title": "1984",
+    "Author": "George Orwell",
+    "Genre": [ "Dystopian", "Classic" ],
+    "PublicationYear": 1949,
+    "Publisher": "Secker & Warburg",
+    "NumOfPages": 328,
+    "Chapters": 23
+  },
+  {
+    "type": "Book",
+    "Title": "Brave New World",
+    "Author": "Aldous Huxley",
+    "Genre": [ "Science Fiction", "Dystopian", "Classic" ],
+    "PublicationYear": 1932,
+    "Publisher": "Chatto & Windus",
+    "NumOfPages": 311,
+    "Chapters": 18
+  },
+  {
+
+    "type": "Comic",
+    "Title": "Watchmen",
+    "Author": "Alan Moore",
+    "Genre": [ "Science Fiction", "Dystopian" ],
+    "PublicationYear": 1986,
+    "Publisher": "DC Comics, US and Titan Books, UK",
+    "NumOfPages": 420,
+    "Illustrator": "Dave Gibbons",
+    "Color": true,
+    "Black_White": false
+  },
+  {
+    "type": "Audiobook",
+    "Title": "The Catcher in the Rye",
+    "Author": "J.D. Salinger",
+    "Genre": [ "Fiction", "Drama", "Classic" ],
+    "PublicationYear": 1951,
+    "Publisher": "Little, Brown and Company",
+    "Narrator": "Peter Biering",
+    "LengthInMinutes": 690
+  }
+]
+
+

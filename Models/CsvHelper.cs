@@ -30,25 +30,3 @@ namespace Boganbefaling_eksamen
         }
     }
 }
-
-
-
-
-
-//            public static void WriteSearchHistoryToCsv(string filePath, List<SearchStatistics.SearchHistoryEntry> searchHistoryData)
-//        {
-//            var config = new CsvConfiguration(CultureInfo.InvariantCulture)
-//            {
-//                HasHeaderRecord = true,
-//            };
-
-//            using (var writer = new StreamWriter(filePath))
-//            using (var csv = new CsvWriter(writer, config))
-//            {
-//                csv.WriteHeader<SearchStatistics.SearchHistoryEntry>();
-//                csv.NextRecord();
-//                csv.WriteRecords(searchHistoryData);
-//            }
-//        }
-//    }
-//}

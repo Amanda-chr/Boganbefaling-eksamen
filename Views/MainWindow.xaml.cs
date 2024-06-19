@@ -27,7 +27,7 @@ namespace Boganbefaling_eksamen
         {
             var listBox = sender as ListBox;
             var viewModel = DataContext as MainViewModel;
-            viewModel.ValgteGenrer = listBox.SelectedItems.Cast<string>().ToList();
+            viewModel.SelectedGenres = listBox.SelectedItems.Cast<string>().ToList();
         }
     }
 }

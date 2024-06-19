@@ -8,13 +8,14 @@ namespace Boganbefaling_eksamen
 {
     public class Search
     {
+        //the class that represents individual searches and is used in the search history tracking
         public DateTime Timestamp { get; set; }
-        public List<string> ValgteGenrer { get; set; }
+        public List<string> SelectedGenres { get; set; }
 
-        public Search(DateTime timestamp, List<string> valgteGenrer) 
+        public Search(DateTime timestamp, List<string> selectedGenres) 
         { 
             Timestamp = timestamp;
-            ValgteGenrer = valgteGenrer;
+            SelectedGenres = selectedGenres;
         }
     }
 }
